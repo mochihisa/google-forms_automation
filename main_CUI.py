@@ -70,28 +70,30 @@ def get_info(data_list):
     temperature = []
     condition = []
     submission = list(range(2101, 2106))
+    error = []
 
     for data in data_list:
-        if get_late(data):
-            late.append(data)
-        if get_temperature(data):
-            temperature.append(data)
-        if get_condition(data):
-            condition.append(data)
         if get_submission(data):
             submission.remove(data[1])
+            if get_late(data):
+                late.append(data)
+            if get_temperature(data):
+                temperature.append(data)
+            if get_condition(data):
+                condition.append(data)
+        else:
+            error.append(data)
 
-    return late, temperature, condition, submission
+
+    return late, temperature, condition, submission, error
 
 
 def help():
     print("""\
-usage: python3 main-CUI.py [filename]
-       main-CUI.exe [filename]
+usage: python3 main_CUI.py [filename]
+       main_CUI.exe [filename]
 
-if first argument is "help": show helps
-
-filename: indispensable\
+if first argument is "help": show helps\
 """)
 
 
@@ -104,13 +106,13 @@ def main():
 
     else:
         data = get_data(filename)
-        late, temperature, condition, submission = get_info(data)
+        late, temperature, condition, submission, error = get_info(data)
         print(
-            f'raw=\n{pformat(data)}\n\n'
-            f'late=\n{pformat(late)}\n\n'
-            f'temperature=\n{pformat(temperature)}\n\n'
-            f'condition=\n{pformat(condition)}\n\n'
-            f'submission=\n{pformat(submission)}'
+            f'遅れ\n{pformat(late)}\n\n'
+            f'体温\n{pformat(temperature)}\n\n'
+            f'体調\n{pformat(condition)}\n\n'
+            f'未提出\n{pformat(submission)}\n\n'
+            f'名簿に存在しない人\n{pformat(error)}'
         )
 
 
