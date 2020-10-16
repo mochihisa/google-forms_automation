@@ -3,6 +3,8 @@ import sys
 import pandas as pd
 import datetime
 from pprint import pprint, pformat
+import tkinter.filedialog
+import os
 
 
 """
@@ -59,7 +61,10 @@ def get_condition(data):
 
 
 def get_submission(data):
-    if data[1] >= 2100 and data[1] <= 2105:
+    if data[1] >= 2101 and data[1] <= 2140\
+            or data[1] >= 2201 and data[1] <= 2240\
+            or data[1] >= 2301 and data[1] <= 2340\
+            or data[1] >= 2401 and data[1] <= 2440:
         return True
     else:
         return False
@@ -69,23 +74,29 @@ def get_info(data_list):
     late = []
     temperature = []
     condition = []
-    submission = list(range(2101, 2106))
+    submission = list(range(2101, 2141)) + list(range(2201, 2241)) + \
+        list(range(2301, 2341)) + list(range(2401, 2441))
     error = []
 
     for data in data_list:
         if get_submission(data):
-            submission.remove(data[1])
-            if get_late(data):
-                late.append(data)
-            if get_temperature(data):
-                temperature.append(data)
-            if get_condition(data):
-                condition.append(data)
+            if data[1] in submission:
+                submission.remove(data[1])
+                if get_late(data):
+                    late.append(data)
+                if get_temperature(data):
+                    temperature.append(data)
+                if get_condition(data):
+                    condition.append(data)
         else:
             error.append(data)
 
-
     return late, temperature, condition, submission, error
+
+
+def sort(data_list):
+    res = sorted(data_list, key=lambda x: x[1])
+    return res
 
 
 def help():
@@ -93,8 +104,28 @@ def help():
 usage: python3 main_CUI.py [filename]
        main_CUI.exe [filename]
 
-if first argument is "help": show helps\
+if first argument is "help": show help\
 """)
+
+
+def file_read():
+
+    fTyp = [("csv", "*.csv")]
+    iDir = os.path.abspath(os.path.dirname(__file__))
+    file_path = tkinter.filedialog.askopenfilename(
+        filetypes=fTyp, initialdir=iDir)
+    if len(file_path) != 0:
+        return file_path
+    else:
+        exit()
+
+
+def file_write(data_list):
+    dt_now = datetime.datetime.now()
+    date = dt_now.date()
+    df = pd.DataFrame(data_list)
+    df.to_csv(f'{date}.csv', index=False,
+              header=False, sep=',', encoding='utf-8')
 
 
 def main():
@@ -107,11 +138,13 @@ def main():
     else:
         data = get_data(filename)
         late, temperature, condition, submission, error = get_info(data)
+        late, temperature, condition, submission, error = sort(late), sort(
+            temperature), sort(condition), submission, sort(error)
         print(
             f'遅れ\n{pformat(late)}\n\n'
             f'体温\n{pformat(temperature)}\n\n'
             f'体調\n{pformat(condition)}\n\n'
-            f'未提出\n{pformat(submission)}\n\n'
+            f'未提出\n{submission}\n\n'
             f'名簿に存在しない人\n{pformat(error)}'
         )
 
