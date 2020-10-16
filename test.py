@@ -10,25 +10,10 @@ def file_write(data_list):
 
 
 res = []
-for s in random.sample(list(range(2101, 2141)), k=40):
-    date = f'2020/10/16 {random.randint(3,8)}:{random.randint(00,59)}:{random.randint(00,59)} 午前 GMT+9'
-    temperature = random.uniform(34.0, 37.5)
-    condition = np.random.choice(['あり', 'なし'], p=[0.1, 0.9])
-    res = res + [[date, s, f'{temperature:.1f}', condition, None]]
-    print(res)
-for s in random.sample(list(range(2201, 2241)), k=40):
-    date = f'2020/10/16 {random.randint(3,8)}:{random.randint(00,59)}:{random.randint(00,59)} 午前 GMT+9'
-    temperature = random.uniform(34.0, 37.5)
-    condition = np.random.choice(['あり', 'なし'], p=[0.1, 0.9])
-    res = res + [[date, s, f'{temperature:.1f}', condition, None]]
-    print(res)
-for s in random.sample(list(range(2301, 2341)), k=40):
-    date = f'2020/10/16 {random.randint(3,8)}:{random.randint(00,59)}:{random.randint(00,59)} 午前 GMT+9'
-    temperature = random.uniform(34.0, 37.5)
-    condition = np.random.choice(['あり', 'なし'], p=[0.1, 0.9])
-    res = res + [[date, s, f'{temperature:.1f}', condition, None]]
-    print(res)
-for s in random.sample(list(range(2401, 2441)), k=40):
+for s in random.sample(list(range(2101, 2141)), k=40) + \
+        random.sample(list(range(2201, 2241)), k=40) + \
+        random.sample(list(range(2301, 2341)), k=40) + \
+        random.sample(list(range(2401, 2441)), k=40):
     date = f'2020/10/16 {random.randint(3,8)}:{random.randint(00,59)}:{random.randint(00,59)} 午前 GMT+9'
     temperature = random.uniform(34.0, 37.5)
     condition = np.random.choice(['あり', 'なし'], p=[0.1, 0.9])

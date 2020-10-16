@@ -115,16 +115,19 @@ def file_read():
     file_path = tkinter.filedialog.askopenfilename(
         filetypes=fTyp, initialdir=iDir)
     if len(file_path) != 0:
-        return file_path
+        dir = [s for s in file_path.split('/')]
+        dir.pop(-1)
+        dir = '/'.join(dir)
+        return file_path, dir
     else:
         exit()
 
 
-def file_write(data_list):
+def file_write(data_list, dir='.'):
     dt_now = datetime.datetime.now()
     date = dt_now.date()
     df = pd.DataFrame(data_list)
-    df.to_csv(f'{date}.csv', index=False,
+    df.to_csv(f'{dir}/{date}.csv', index=False,
               header=False, sep=',', encoding='utf-8')
 
 
