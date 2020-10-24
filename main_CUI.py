@@ -115,6 +115,8 @@ def file_read():
     file_path = tkinter.filedialog.askopenfilename(
         filetypes=fTyp, initialdir=iDir)
     if len(file_path) != 0:
+        if os.name == 'nt':
+            file_path.replace('¥¥','/')
         dir = [s for s in file_path.split('/')]
         dir.pop(-1)
         dir = '/'.join(dir)
